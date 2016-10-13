@@ -2027,7 +2027,7 @@ static void ApproximateBestSubset(vector<pair<CAmount, pair<const CWalletTx*, un
     vfBest.assign(vValue.size(), true);
     nBest = nTotalLower;
 
-    seed_insecure_rand();
+    FastRandomContext insecure_rand;
 
     for (int nRep = 0; nRep < iterations && nBest != nTargetValue; nRep++) {
         vfIncluded.assign(vValue.size(), false);
@@ -2041,7 +2041,7 @@ static void ApproximateBestSubset(vector<pair<CAmount, pair<const CWalletTx*, un
                 //that the rng is fast. We do not use a constant random sequence,
                 //because there may be some privacy improvement by making
                 //the selection random.
-                if (nPass == 0 ? insecure_rand() & 1 : !vfIncluded[i]) {
+                if (nPass == 0 ? insecure_rand.rand32() & 1 : !vfIncluded[i]) {
                     nTotal += vValue[i].first;
                     vfIncluded[i] = true;
                     if (nTotal >= nTargetValue) {
