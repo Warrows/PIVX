@@ -24,10 +24,10 @@
 #include "bitcoinamountfield.h"
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QSpinBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QSpinBox>
 #include <QClipboard>
 #include <QDebug>
 
