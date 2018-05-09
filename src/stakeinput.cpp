@@ -206,8 +206,8 @@ bool CPivStake::CreateTxOuts(CWallet* pwallet, vector<CTxOut>& vout, CAmount nTo
     if (whichType == TX_PUBKEYHASH) // pay to address type
     {
         //convert to pay to public key type
-        CKey key;
-        if (!pwallet->GetKey(uint160(vSolutions[0]), key))
+        CKey key;CKeyID keyID = CKeyID(uint160(vSolutions[0]));
+        if (!pwallet->GetKey(keyID, key))
             return false;
 
         scriptPubKey << key.GetPubKey() << OP_CHECKSIG;
