@@ -130,6 +130,7 @@ BITCOIN_CORE_H = \
   merkleblock.h \
   miner.h \
   mruset.h \
+  multisignature.h \
   netbase.h \
   net.h \
   noui.h \
@@ -370,6 +371,7 @@ libbitcoin_common_a_SOURCES = \
   invalid.cpp \
   key.cpp \
   keystore.cpp \
+  multisignature.cpp \
   netbase.cpp \
   protocol.cpp \
   pubkey.cpp \
