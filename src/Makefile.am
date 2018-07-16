@@ -217,6 +217,7 @@ libbitcoin_server_a_SOURCES = \
   main.cpp \
   merkleblock.cpp \
   miner.cpp \
+  multisignature.cpp \
   net.cpp \
   noui.cpp \
   pow.cpp \
@@ -267,6 +268,7 @@ libbitcoin_wallet_a_SOURCES = \
   masternode-sync.cpp \
   masternodeconfig.cpp \
   masternodeman.cpp \
+  multisignature.cpp \
   rpcdump.cpp \
   zpiv/deterministicmint.cpp \
   zpiv/zerocoin.cpp \
