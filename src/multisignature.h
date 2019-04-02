@@ -5,12 +5,10 @@
 #ifndef PIVX_MULTISIGNATURE_H
 #define PIVX_MULTISIGNATURE_H
 
-
-#include <script/script.h>
-#include <utility>
+#include "script/script.h"
 #include "base58.h"
 #include "init.h"
-
+#include <utility>
 
 class CMultisignatureAddress
 {

@@ -22,6 +22,7 @@
 #include "guiutil.h"
 #include "qvalidatedlineedit.h"
 #include "bitcoinamountfield.h"
+#include "multisignature.h"
 
 #include <QVariant>
 #include <QHBoxLayout>
@@ -34,7 +35,6 @@
 #include <QArgument>
 #include <QtGlobal>
 #include <QString>
-#include <multisignature.h>
 #include <thread>
 
 

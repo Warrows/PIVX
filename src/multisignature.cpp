@@ -2,17 +2,14 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <regex>
-#include <boost/algorithm/string/split.hpp>
 #include "multisignature.h"
 #include "utilstrencodings.h"
 #include "tinyformat.h"
 #include "util.h"
 #include "streams.h"
 #include "wallet.h"
-
-
-using namespace std;
+#include <boost/algorithm/string/split.hpp>
+#include <regex>
 
 CMultisignatureAddress::CMultisignatureAddress(int nSignaturesRequired, const vector<string>& vAddressOwners)
 {
@@ -37,7 +34,8 @@ CMultisignatureAddress::CMultisignatureAddress(string strRedeemScript)
 }
 
 bool CMultisignatureAddress::ValidateConfiguration()
-{//gather pub keys
+{
+    //gather pub keys
     try {
         if(this->nOwners == -1 || this->nSigsRequired == -1) {
             throw CMultisignatureException("Failed to read input");
@@ -104,11 +102,11 @@ bool CMultisignatureAddress::ConvertAndValidatePubKeys(vector<string> vstrPubKey
 void CMultisignatureAddress::CreateRedeemScript()
 {
     scriptRedeem << CScript::EncodeOP_N(nSigsRequired);
-    //public keys
+    // public keys
     for(const CPubKey& key : vOwners) {
         scriptRedeem << ToByteVector(key);
     }
-    //OP_N for total pubkeys
+    // OP_N for total pubkeys
     scriptRedeem << CScript::EncodeOP_N(nOwners);
     scriptRedeem << OP_CHECKMULTISIG;
 
@@ -136,12 +134,12 @@ bool CMultisignatureAddress::ParseRedeemScript(const string& strRedeemScript)
 
 void CMultisignatureAddress::ParseRPCRedeem(const string& strRedeemScript)
 {
-    //extract sigs required
+    // extract sigs required
     regex sigsRequiredExtractor("([0-9][0-9]?) \\[");
     cmatch charactersMatched;
     regex_search(strRedeemScript.data(), charactersMatched, sigsRequiredExtractor);
 
-    //match result +1 because don't want full match, just the number
+    // match result +1 because don't want full match, just the number
     int nSignature;
     try {
         nSignature = stoi((*(charactersMatched.begin()+1)).str());
@@ -149,16 +147,16 @@ void CMultisignatureAddress::ParseRPCRedeem(const string& strRedeemScript)
         throw CMultisignatureException("failed to get amount of signatures required");
     }
 
-    //extract pubkey array
+    // extract pubkey array
     string substrPubKeys(strRedeemScript.substr(strRedeemScript.find_first_of('['), strRedeemScript.find_first_of(']')));
 
-    //extract pubkeys
+    // extract pubkeys
     vector<string> vstrPubKeys;
     smatch sm;
     regex pubKeyExtractor(R"(\"([A-Z0-9a-z]+)\")");
     sregex_iterator it(substrPubKeys.begin(), substrPubKeys.end(), pubKeyExtractor);
 
-    //iterate through matches and retrieve keys
+    // iterate through matches and retrieve keys
     while(it != sregex_iterator{}) {
         sm = smatch(*it);
         for(auto i = sm.begin()+1; i != sm.end(); i++) {
@@ -184,7 +182,7 @@ void CMultisignatureAddress::ParseHexRedeem(const string& strRedeemScript)
 
 void CMultisignatureAddress::ParseSpacedRedeem(const string& strRedeemScript)
 {
-    //trim leading and trailing spaces
+    // trim leading and trailing spaces
     string trimmed = regex_replace(strRedeemScript, regex("^\\s+"), "");
     trimmed = regex_replace(strRedeemScript, regex("\\s+$"), "");
 
@@ -200,11 +198,11 @@ void CMultisignatureAddress::ParseSpacedRedeem(const string& strRedeemScript)
     }
 
     if(vstrSplitRedeem.back() == "OP_CHECKMULTISIG") {
-        vstrSplitRedeem.pop_back(); //remove OP code
+        vstrSplitRedeem.pop_back(); // remove OP code
     }
 
     if(!IsHex(vstrSplitRedeem.back())) {
-        vstrSplitRedeem.pop_back(); //remove total owners if present
+        vstrSplitRedeem.pop_back(); // remove total owners if present
     }
 
     *this = CMultisignatureAddress(nSignatures, vector<string>(vstrSplitRedeem.begin(), vstrSplitRedeem.end()));
@@ -217,7 +215,6 @@ bool CMultisignatureAddress::HandleError(const string& err)
     return false;
 }
 
-//wallet only
 #ifdef ENABLE_WALLET
 bool CMultisignatureAddress::AddToWallet(const std::string addressLabel)
 {

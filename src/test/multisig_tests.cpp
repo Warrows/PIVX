@@ -10,6 +10,8 @@
 #include "script/interpreter.h"
 #include "script/sign.h"
 #include "uint256.h"
+#include "base58.h"
+#include "multisignature.h"
 
 #ifdef ENABLE_WALLET
 #include "wallet_ismine.h"
@@ -18,8 +20,6 @@
 #include <boost/assign/std/vector.hpp>
 #include <boost/foreach.hpp>
 #include <boost/test/unit_test.hpp>
-#include <base58.h>
-#include <multisignature.h>
 
 using namespace std;
 using namespace boost::assign;
