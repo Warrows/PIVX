@@ -979,6 +979,7 @@ public:
         fImmatureWatchCreditCached = false;
         fDebitCached = false;
         fChangeCached = false;
+        nTimeSmart = 0;
     }
 
     void BindWallet(CWallet* pwalletIn)
