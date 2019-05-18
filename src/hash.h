@@ -335,6 +335,9 @@ inline uint256 HashQuark(const T1 pbegin, const T1 pend)
     uint512 zero = 0;
 
     uint512 hash[9];
+    for (int i = 0; i < 9; i++) {
+        hash[i] = uint512(0);
+    }
 
     sph_blake512_init(&ctx_blake);
     // ZBLAKE;
