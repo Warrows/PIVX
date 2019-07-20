@@ -735,12 +735,7 @@ private:
 
 public:
     uint256 hashBlock;
-    std::vector<uint256> vMerkleBranch;
     int nIndex;
-
-    // memory only
-    mutable bool fMerkleVerified;
-
 
     CMerkleTx()
     {
@@ -756,7 +751,6 @@ public:
     {
         hashBlock = 0;
         nIndex = -1;
-        fMerkleVerified = false;
     }
 
     ADD_SERIALIZE_METHODS;
@@ -764,6 +758,7 @@ public:
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
     {
+        std::vector<uint256> vMerkleBranch; // For compatibility with older versions.
         READWRITE(*(CTransaction*)this);
         nVersion = this->nVersion;
         READWRITE(hashBlock);
