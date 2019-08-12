@@ -80,6 +80,7 @@ BASE_SCRIPTS= [
     'wallet_listreceivedby.py',
     'wallet_accounts.py',
     'wallet_dump.py',
+    'wallet_hd.py',
     'rpc_listtransactions.py',
 
     # vv Tests less than 60s vv
@@ -312,9 +313,9 @@ def run_tests(test_list, src_dir, build_dir, exeext, tmpdir, jobs=1, enable_cove
         done_str = "{}/{} - {}{}{}".format(i + 1, test_count, BOLD[1], test_result.name, BOLD[0])
         if test_result.status == "Passed":
             if stderr == "":
-                logging.debug("%s passed, Duration: %s s" % (done_str, test_result.time))
+                logging.debug("%s passed, Duration: %s s\n" % (done_str, test_result.time))
             else:
-                logging.debug("%s passed (with warnings), Duration: %s s" % (done_str, test_result.time))
+                logging.debug("%s passed (with warnings), Duration: %s s\n" % (done_str, test_result.time))
                 print(BOLD[1] + 'stderr:\n' + BOLD[0] + stderr + '\n')
         elif test_result.status == "Skipped":
             logging.debug("%s skipped" % (done_str))

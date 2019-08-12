@@ -858,7 +858,7 @@ CBitcoinAddress WalletModel::getNewAddress(std::string label) const{
         wallet->TopUpKeyPool();
 
     // Generate a new key that is added to wallet
-    CPubKey newKey = wallet->GenerateNewKey();
+    CPubKey newKey = wallet->GenerateNewKey(0);
     CKeyID keyID = newKey.GetID();
 
     pwalletMain->SetAddressBook(keyID, label, "receive");
