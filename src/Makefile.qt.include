@@ -749,6 +749,23 @@ BITCOIN_QT_WALLET_CPP = \
   qt/pivx/welcomecontentwidget.cpp \
   qt/pivx/splash.cpp
 
+QT_MOC_PIVX = \
+  qt/pivx/moc_pwidget.cpp \
+  qt/pivx/moc_furabstractlistitemdelegate.cpp \
+  qt/pivx/moc_dashboardwidget.cpp \
+  qt/pivx/moc_masternodeswidget.cpp \
+  qt/pivx/moc_receivewidget.cpp \
+  qt/pivx/moc_addresseswidget.cpp \
+  qt/pivx/settings/moc_settingsconsolewidget.cpp
+
+QT_PIVX_CPP = \
+  qt/pivx/pwidget.cpp \
+  qt/pivx/furabstractlistitemdelegate.cpp \
+  qt/pivx/dashboardwidget.cpp \
+  qt/pivx/masternodeswidget.cpp \
+  qt/pivx/receivewidget.cpp \
+  qt/pivx/addresseswidget.cpp \
+  qt/pivx/settings/settingsconsolewidget.cpp
 
 BITCOIN_QT_CPP = $(BITCOIN_QT_BASE_CPP)
 if TARGET_WINDOWS
@@ -862,6 +879,8 @@ $(QT_QRC_CPP): $(QT_QRC) $(QT_FORMS_H) $(RES_ICONS) $(RES_IMAGES) $(RES_CSS) $(R
 CLEAN_QT = $(nodist_qt_libbitcoinqt_a_SOURCES) $(QT_QM) $(QT_FORMS_H) qt/*.gcda qt/*.gcno qt/temp_pivx_locale.qrc
 
 CLEANFILES += $(CLEAN_QT)
+
+$(QT_PIVX_CPP) : $(QT_MOC_PIVX)
 
 pivx_qt_clean: FORCE
 	rm -f $(CLEAN_QT) $(qt_libbitcoinqt_a_OBJECTS) $(qt_pivx_qt_OBJECTS) qt/pivx-qt$(EXEEXT) $(LIBBITCOINQT)
