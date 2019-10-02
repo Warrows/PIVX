@@ -108,6 +108,7 @@ BITCOIN_CORE_H = \
   obfuscation.h \
   obfuscation-relay.h \
   wallet/db.h \
+  fs.h \
   hash.h \
   httprpc.h \
   httpserver.h \
@@ -409,6 +410,7 @@ libbitcoin_util_a_SOURCES = \
   compat/glibc_sanity.cpp \
   compat/glibcxx_sanity.cpp \
   compat/strnlen.cpp \
+  fs.cpp \
   random.cpp \
   rpc/protocol.cpp \
   support/cleanse.cpp \

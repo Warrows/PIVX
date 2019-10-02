@@ -161,9 +161,9 @@ public:
     /* Function to determin if a certain KV/key-type is a key (cryptographical key) type */
     static bool IsKeyType(const std::string& strType);
     /* verifies the database environment */
-    static bool VerifyEnvironment(const std::string& walletFile, const boost::filesystem::path& dataDir, std::string& errorStr);
+    static bool VerifyEnvironment(const std::string& walletFile, const fs::path& dataDir, std::string& errorStr);
     /* verifies the database file */
-    static bool VerifyDatabaseFile(const std::string& walletFile, const boost::filesystem::path& dataDir, std::string& warningStr, std::string& errorStr);
+    static bool VerifyDatabaseFile(const std::string& walletFile, const fs::path& dataDir, std::string& warningStr, std::string& errorStr);
 
     bool WriteDeterministicMint(const CDeterministicMint& dMint);
     bool ReadDeterministicMint(const uint256& hashPubcoin, CDeterministicMint& dMint);
@@ -213,8 +213,8 @@ private:
 };
 
 void NotifyBacked(const CWallet& wallet, bool fSuccess, std::string strMessage);
-bool BackupWallet(const CWallet& wallet, const boost::filesystem::path& strDest, bool fEnableCustom = true);
-bool AttemptBackupWallet(const CWallet& wallet, const boost::filesystem::path& pathSrc, const boost::filesystem::path& pathDest);
+bool BackupWallet(const CWallet& wallet, const fs::path& strDest, bool fEnableCustom = true);
+bool AttemptBackupWallet(const CWallet& wallet, const fs::path& pathSrc, const fs::path& pathDest);
 
 
 #endif // BITCOIN_WALLETDB_H
