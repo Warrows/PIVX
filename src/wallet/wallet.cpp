@@ -4946,22 +4946,22 @@ std::string CWallet::GetUniqueWalletBackupName(bool fzpivAuto) const
 
 void CWallet::ZPivBackupWallet()
 {
-    boost::filesystem::path backupDir = GetDataDir() / "backups";
-    boost::filesystem::path backupPath;
+    fs::path backupDir = GetDataDir() / "backups";
+    fs::path backupPath;
     std::string strNewBackupName;
 
     for (int i = 0; i < 10; i++) {
         strNewBackupName = strprintf("wallet-autozpivbackup-%d.dat", i);
         backupPath = backupDir / strNewBackupName;
 
-        if (boost::filesystem::exists(backupPath)) {
+        if (fs::exists(backupPath)) {
             //Keep up to 10 backups
             if (i <= 8) {
                 //If the next file backup exists and is newer, then iterate
-                boost::filesystem::path nextBackupPath = backupDir / strprintf("wallet-autozpivbackup-%d.dat", i + 1);
-                if (boost::filesystem::exists(nextBackupPath)) {
-                    time_t timeThis = boost::filesystem::last_write_time(backupPath);
-                    time_t timeNext = boost::filesystem::last_write_time(nextBackupPath);
+                fs::path nextBackupPath = backupDir / strprintf("wallet-autozpivbackup-%d.dat", i + 1);
+                if (fs::exists(nextBackupPath)) {
+                    time_t timeThis = fs::last_write_time(backupPath);
+                    time_t timeNext = fs::last_write_time(nextBackupPath);
                     if (timeThis > timeNext) {
                         //The next backup is created before this backup was
                         //The next backup is the correct path to use
@@ -4984,8 +4984,8 @@ void CWallet::ZPivBackupWallet()
     BackupWallet(*this, backupPath.string());
 
     if(!GetArg("-zpivbackuppath", "").empty()) {
-        boost::filesystem::path customPath(GetArg("-zpivbackuppath", ""));
-        boost::filesystem::create_directories(customPath);
+        fs::path customPath(GetArg("-zpivbackuppath", ""));
+        fs::create_directories(customPath);
 
         if(!customPath.has_extension()) {
             customPath /= GetUniqueWalletBackupName(true);

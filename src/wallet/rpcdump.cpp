@@ -375,8 +375,8 @@ UniValue dumpwallet(const UniValue& params, bool fHelp)
 
     EnsureWalletIsUnlocked();
 
-    boost::filesystem::path filepath = params[0].get_str().c_str();
-    filepath = boost::filesystem::absolute(filepath);
+    fs::path filepath = params[0].get_str().c_str();
+    filepath = fs::absolute(filepath);
 
     std::ofstream file;
     file.open(params[0].get_str().c_str());
