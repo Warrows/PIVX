@@ -9,10 +9,9 @@
 
 #include "guiutil.h"
 
+#include "fs.h"
 #include "util.h"
 #include "qt/pivx/qtutils.h"
-
-#include <boost/filesystem.hpp>
 
 #include <QFileDialog>
 #include <QMessageBox>
