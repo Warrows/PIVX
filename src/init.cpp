@@ -263,7 +263,7 @@ void PrepareShutdown()
     try {
         fs::remove(GetPidFile());
     } catch (const fs::filesystem_error& e) {
-        LogPrintf("%s: Unable to remove pidfile: %s\n", __func__, e.what());
+        LogPrintf("%s: Unable to remove pidfile: %s\n", __func__, fsbridge::get_filesystem_error_message(e));
     }
 #endif
     UnregisterAllValidationInterfaces();
@@ -1145,7 +1145,7 @@ bool AppInit2()
                         fs::copy_file(sourceFile, backupFile);
                         LogPrintf("Creating backup of %s -> %s\n", sourceFile, backupFile);
                     } catch (const fs::filesystem_error& error) {
-                        LogPrintf("Failed to create backup %s\n", error.what());
+                        LogPrintf("Failed to create backup %s\n", fsbridge::get_filesystem_error_message(error));
                     }
 #else
                     fsbridge::ifstream src(sourceFile.string(), std::ios::binary);
@@ -1181,7 +1181,7 @@ bool AppInit2()
                             fs::remove(file.second);
                             LogPrintf("Old backup deleted: %s\n", file.second);
                         } catch (const fs::filesystem_error& error) {
-                            LogPrintf("Failed to delete backup %s\n", error.what());
+                            LogPrintf("Failed to delete backup %s\n", fsbridge::get_filesystem_error_message(error));
                         }
                     }
                 }
@@ -1219,7 +1219,7 @@ bool AppInit2()
                     LogPrintf("-resync: folder deleted: %s\n", zerocoinDir.string().c_str());
                 }
             } catch (const fs::filesystem_error& error) {
-                LogPrintf("Failed to delete blockchain folders %s\n", error.what());
+                LogPrintf("Failed to delete blockchain folders %s\n", fsbridge::get_filesystem_error_message(error));
             }
         }
 

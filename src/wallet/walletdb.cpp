@@ -956,7 +956,7 @@ bool BackupWallet(const CWallet& wallet, const fs::path& strDest, bool fEnableCu
             try {
                 fs::create_directories(pathCustom);
             } catch (const fs::filesystem_error& e) {
-                NotifyBacked(wallet, false, strprintf("%s\n", e.what()));
+                NotifyBacked(wallet, false, strprintf("%s\n", fsbridge::get_filesystem_error_message(e)));
                 pathCustom = "";
             }
         }
@@ -1026,7 +1026,7 @@ bool BackupWallet(const CWallet& wallet, const fs::path& strDest, bool fEnableCu
                                     LogPrintf("Old backup deleted: %s\n", (*entry).second);
                                 }
                             } catch (const fs::filesystem_error& error) {
-                                std::string strMessage = strprintf("Failed to delete backup %s\n", error.what());
+                                std::string strMessage = strprintf("Failed to delete backup %s\n", fsbridge::get_filesystem_error_message(error));
                                 LogPrint(nullptr, strMessage.data());
                                 NotifyBacked(wallet, false, strMessage);
                             }
@@ -1067,7 +1067,7 @@ bool AttemptBackupWallet(const CWallet& wallet, const fs::path& pathSrc, const f
         retStatus = true;
     } catch (const fs::filesystem_error& e) {
         retStatus = false;
-        strMessage = strprintf("%s\n", e.what());
+        strMessage = strprintf("%s\n", fsbridge::get_filesystem_error_message(e));
         LogPrint(nullptr, strMessage.data());
     }
     NotifyBacked(wallet, retStatus, strMessage);
