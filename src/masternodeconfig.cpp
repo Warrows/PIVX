@@ -34,7 +34,7 @@ bool CMasternodeConfig::read(std::string& strErr)
 {
     int linenumber = 1;
     fs::path pathMasternodeConfigFile = GetMasternodeConfigFile();
-    fs::ifstream streamConfig(pathMasternodeConfigFile);
+    fsbridge::ifstream streamConfig(pathMasternodeConfigFile);
 
     if (!streamConfig.good()) {
         FILE* configFile = fopen(pathMasternodeConfigFile.string().c_str(), "a");

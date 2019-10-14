@@ -1153,8 +1153,8 @@ bool AppInit2()
                         LogPrintf("Failed to create backup %s\n", error.what());
                     }
 #else
-                    std::ifstream src(sourceFile.string(), std::ios::binary);
-                    std::ofstream dst(backupFile.string(), std::ios::binary);
+                    fsbridge::ifstream src(sourceFile.string(), std::ios::binary);
+                    fsbridge::ofstream dst(backupFile.string(), std::ios::binary);
                     dst << src.rdbuf();
 #endif
                 }
