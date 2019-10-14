@@ -14,6 +14,7 @@
 
 #include <boost/filesystem/operations.hpp>
 #include <stdio.h>
+#include <tuple>
 
 #include <event2/event.h>
 #include <event2/http.h>
@@ -291,6 +292,10 @@ int CommandLineRPC(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
+#ifdef WIN32
+    util::WinCmdLineArgs winArgs;
+    std::tie(argc, argv) = winArgs.get();
+#endif
     SetupEnvironment();
     if (!SetupNetworking()) {
         fprintf(stderr, "Error: Initializing networking failed\n");
