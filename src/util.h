@@ -25,6 +25,7 @@
 #include <map>
 #include <stdint.h>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include <boost/thread/exceptions.hpp>
@@ -244,5 +245,22 @@ void TraceThread(const char* name, Callable func)
         throw;
     }
 }
+
+namespace util {
+#ifdef WIN32
+class WinCmdLineArgs
+{
+public:
+    WinCmdLineArgs();
+    ~WinCmdLineArgs();
+    std::pair<int, char**> get();
+
+private:
+    int argc;
+    char** argv;
+    std::vector<std::string> args;
+};
+#endif
+} // namespace util
 
 #endif // BITCOIN_UTIL_H
