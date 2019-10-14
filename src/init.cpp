@@ -55,11 +55,11 @@
 
 #ifndef WIN32
 #include <signal.h>
+#include <sys/stat.h>
 #endif
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/algorithm/string/replace.hpp>
-#include <boost/interprocess/sync/file_lock.hpp>
 #include <boost/thread.hpp>
 #include <boost/foreach.hpp>
 
@@ -1067,10 +1067,9 @@ bool AppInit2()
     fs::path pathLockFile = GetDataDir() / ".lock";
     FILE* file = fsbridge::fopen(pathLockFile, "a"); // empty lock file; created if it doesn't exist.
     if (file) fclose(file);
-    static boost::interprocess::file_lock lock(pathLockFile.string().c_str());
+    static fsbridge::FileLock lock(pathLockFile);
 
-    // Wait maximum 10 seconds if an old wallet is still running. Avoids lockup during restart
-    if (!lock.timed_lock(boost::get_system_time() + boost::posix_time::seconds(10)))
+    if (!lock.TryLock())
         return InitError(strprintf(_("Cannot obtain a lock on data directory %s. PIVX Core is probably already running."), strDataDir));
 
 #ifndef WIN32
