@@ -86,9 +86,9 @@ bool GenerateAuthCookie(std::string *cookie_out)
     /** the umask determines what permissions are used to create this file -
      * these are set to 077 in init.cpp unless overridden with -sysperms.
      */
-    std::ofstream file;
+    fsbridge::ofstream file;
     fs::path filepath = GetAuthCookieFile();
-    file.open(filepath.string().c_str());
+    file.open(filepath);
     if (!file.is_open()) {
         LogPrintf("Unable to open cookie authentication file %s for writing\n", filepath.string());
         return false;
@@ -104,10 +104,10 @@ bool GenerateAuthCookie(std::string *cookie_out)
 
 bool GetAuthCookie(std::string *cookie_out)
 {
-    std::ifstream file;
+    fsbridge::ifstream file;
     std::string cookie;
     fs::path filepath = GetAuthCookieFile();
-    file.open(filepath.string().c_str());
+    file.open(filepath);
     if (!file.is_open())
         return false;
     std::getline(file, cookie);
