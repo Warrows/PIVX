@@ -261,10 +261,11 @@ int LogPrintStr(const std::string& str)
             fReopenDebugLog = false;
             fs::path pathDebug = GetDataDir() / "debug.log";
             FILE* new_fileout = fsbridge::fopen(pathDebug, "a");
-            if (new_fileout)
+            if (new_fileout) {
                 setbuf(new_fileout, nullptr); // unbuffered
                 fclose(fileout);
                 fileout = new_fileout;
+            }
         }
 
         // Debug print useful for profiling
