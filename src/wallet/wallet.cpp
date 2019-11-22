@@ -34,6 +34,7 @@
 #include <assert.h>
 
 #include <boost/algorithm/string/replace.hpp>
+#include <boost/filesystem.hpp>
 #include <boost/thread.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -457,6 +458,48 @@ std::set<uint256> CWallet::GetConflicts(const uint256& txid) const
             result.insert(it->second);
     }
     return result;
+}
+
+void CWallet::Flush(bool shutdown)
+{
+    bitdb.Flush(shutdown);
+}
+
+bool CWallet::Verify(const std::string& walletFile, std::string& warningString, std::string& errorString)
+{
+    if (GetBoolArg("-disablewallet", false))
+        return true;
+
+    uiInterface.InitMessage(_("Verifying wallet..."));
+
+    std::string strError;
+    if (!CWalletDB::VerifyEnvironment(walletFile, GetDataDir().string(), strError)) {
+        errorString += strError;
+        return false;
+    }
+
+    if (GetBoolArg("-salvagewallet", false))
+    {
+        // Recover readable keypairs:
+        CWallet dummyWallet;
+        if (!CWalletDB::Recover(walletFile, (void *)&dummyWallet, CWalletDB::RecoverKeysOnlyFilter)) {
+            return false;
+        }
+    }
+
+    std::string strWarning;
+    bool dbV = CWalletDB::VerifyDatabaseFile(walletFile, GetDataDir().string(), strWarning, strError);
+    if (!strWarning.empty())
+    {
+        warningString += strWarning;
+    }
+    if (!dbV)
+    {
+        errorString += strError;
+        return false;
+    }
+
+    return true;
 }
 
 void CWallet::SyncMetaData(std::pair<TxSpends::iterator, TxSpends::iterator> range)
@@ -4906,22 +4949,22 @@ std::string CWallet::GetUniqueWalletBackupName(bool fzpivAuto) const
 
 void CWallet::ZPivBackupWallet()
 {
-    boost::filesystem::path backupDir = GetDataDir() / "backups";
-    boost::filesystem::path backupPath;
+    fs::path backupDir = GetDataDir() / "backups";
+    fs::path backupPath;
     std::string strNewBackupName;
 
     for (int i = 0; i < 10; i++) {
         strNewBackupName = strprintf("wallet-autozpivbackup-%d.dat", i);
         backupPath = backupDir / strNewBackupName;
 
-        if (boost::filesystem::exists(backupPath)) {
+        if (fs::exists(backupPath)) {
             //Keep up to 10 backups
             if (i <= 8) {
                 //If the next file backup exists and is newer, then iterate
-                boost::filesystem::path nextBackupPath = backupDir / strprintf("wallet-autozpivbackup-%d.dat", i + 1);
-                if (boost::filesystem::exists(nextBackupPath)) {
-                    time_t timeThis = boost::filesystem::last_write_time(backupPath);
-                    time_t timeNext = boost::filesystem::last_write_time(nextBackupPath);
+                fs::path nextBackupPath = backupDir / strprintf("wallet-autozpivbackup-%d.dat", i + 1);
+                if (fs::exists(nextBackupPath)) {
+                    time_t timeThis = fs::last_write_time(backupPath);
+                    time_t timeNext = fs::last_write_time(nextBackupPath);
                     if (timeThis > timeNext) {
                         //The next backup is created before this backup was
                         //The next backup is the correct path to use
@@ -4944,8 +4987,8 @@ void CWallet::ZPivBackupWallet()
     BackupWallet(*this, backupPath.string());
 
     if(!GetArg("-zpivbackuppath", "").empty()) {
-        boost::filesystem::path customPath(GetArg("-zpivbackuppath", ""));
-        boost::filesystem::create_directories(customPath);
+        fs::path customPath(GetArg("-zpivbackuppath", ""));
+        fs::create_directories(customPath);
 
         if(!customPath.has_extension()) {
             customPath /= GetUniqueWalletBackupName(true);

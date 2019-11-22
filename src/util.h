@@ -17,6 +17,7 @@
 #endif
 
 #include "compat.h"
+#include "fs.h"
 #include "tinyformat.h"
 #include "utiltime.h"
 
@@ -24,9 +25,9 @@
 #include <map>
 #include <stdint.h>
 #include <string>
+#include <utility>
 #include <vector>
 
-#include <boost/filesystem/path.hpp>
 #include <boost/thread/exceptions.hpp>
 #include <boost/thread/condition_variable.hpp> // for boost::thread_interrupted
 
@@ -128,22 +129,22 @@ void FileCommit(FILE* fileout);
 bool TruncateFile(FILE* file, unsigned int length);
 int RaiseFileDescriptorLimit(int nMinFD);
 void AllocateFileRange(FILE* file, unsigned int offset, unsigned int length);
-bool RenameOver(boost::filesystem::path src, boost::filesystem::path dest);
-bool TryCreateDirectory(const boost::filesystem::path& p);
-boost::filesystem::path GetDefaultDataDir();
-const boost::filesystem::path &GetDataDir(bool fNetSpecific = true);
+bool RenameOver(fs::path src, fs::path dest);
+bool TryCreateDirectory(const fs::path& p);
+fs::path GetDefaultDataDir();
+const fs::path &GetDataDir(bool fNetSpecific = true);
 void ClearDatadirCache();
-boost::filesystem::path GetConfigFile();
-boost::filesystem::path GetMasternodeConfigFile();
+fs::path GetConfigFile();
+fs::path GetMasternodeConfigFile();
 #ifndef WIN32
-boost::filesystem::path GetPidFile();
-void CreatePidFile(const boost::filesystem::path& path, pid_t pid);
+fs::path GetPidFile();
+void CreatePidFile(const fs::path& path, pid_t pid);
 #endif
 void ReadConfigFile(std::map<std::string, std::string>& mapSettingsRet, std::map<std::string, std::vector<std::string> >& mapMultiSettingsRet);
 #ifdef WIN32
-boost::filesystem::path GetSpecialFolderPath(int nFolder, bool fCreate = true);
+fs::path GetSpecialFolderPath(int nFolder, bool fCreate = true);
 #endif
-boost::filesystem::path GetTempPath();
+fs::path GetTempPath();
 void ShrinkDebugFile();
 void runCommand(std::string strCommand);
 
@@ -244,5 +245,22 @@ void TraceThread(const char* name, Callable func)
         throw;
     }
 }
+
+namespace util {
+#ifdef WIN32
+class WinCmdLineArgs
+{
+public:
+    WinCmdLineArgs();
+    ~WinCmdLineArgs();
+    std::pair<int, char**> get();
+
+private:
+    int argc;
+    char** argv;
+    std::vector<std::string> args;
+};
+#endif
+} // namespace util
 
 #endif // BITCOIN_UTIL_H

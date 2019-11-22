@@ -4,9 +4,8 @@
 
 #include "leveldbwrapper.h"
 
+#include "fs.h"
 #include "util.h"
-
-#include <boost/filesystem.hpp>
 
 #include <leveldb/cache.h>
 #include <leveldb/env.h>
@@ -43,7 +42,7 @@ static leveldb::Options GetOptions(size_t nCacheSize)
     return options;
 }
 
-CLevelDBWrapper::CLevelDBWrapper(const boost::filesystem::path& path, size_t nCacheSize, bool fMemory, bool fWipe)
+CLevelDBWrapper::CLevelDBWrapper(const fs::path& path, size_t nCacheSize, bool fMemory, bool fWipe)
 {
     penv = NULL;
     readoptions.verify_checksums = true;

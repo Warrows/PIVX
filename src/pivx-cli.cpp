@@ -14,6 +14,7 @@
 
 #include <boost/filesystem/operations.hpp>
 #include <stdio.h>
+#include <tuple>
 
 #include <event2/event.h>
 #include <event2/http.h>
@@ -84,7 +85,7 @@ static bool AppInitRPC(int argc, char* argv[])
         fprintf(stdout, "%s", strUsage.c_str());
         return false;
     }
-    if (!boost::filesystem::is_directory(GetDataDir(false))) {
+    if (!fs::is_directory(GetDataDir(false))) {
         fprintf(stderr, "Error: Specified data directory \"%s\" does not exist.\n", mapArgs["-datadir"].c_str());
         return false;
     }
@@ -291,6 +292,10 @@ int CommandLineRPC(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
+#ifdef WIN32
+    util::WinCmdLineArgs winArgs;
+    std::tie(argc, argv) = winArgs.get();
+#endif
     SetupEnvironment();
     if (!SetupNetworking()) {
         fprintf(stderr, "Error: Initializing networking failed\n");
