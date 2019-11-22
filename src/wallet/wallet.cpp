@@ -473,23 +473,26 @@ bool CWallet::Verify(const std::string& walletFile, std::string& warningString, 
     uiInterface.InitMessage(_("Verifying wallet..."));
 
     std::string strError;
-    if (!CWalletDB::VerifyEnvironment(walletFile, GetDataDir().string(), strError))
+    if (!CWalletDB::VerifyEnvironment(walletFile, GetDataDir().string(), strError)) {
         errorString += strError;
-        return true;
+        return false;
+    }
 
     if (GetBoolArg("-salvagewallet", false))
     {
         // Recover readable keypairs:
         CWallet dummyWallet;
-        if (!CWalletDB::Recover(walletFile, (void *)&dummyWallet, CWalletDB::RecoverKeysOnlyFilter))
+        if (!CWalletDB::Recover(walletFile, (void *)&dummyWallet, CWalletDB::RecoverKeysOnlyFilter)) {
             return false;
+        }
     }
 
     std::string strWarning;
     bool dbV = CWalletDB::VerifyDatabaseFile(walletFile, GetDataDir().string(), strWarning, strError);
     if (!strWarning.empty())
+    {
         warningString += strWarning;
-        return true;
+    }
     if (!dbV)
     {
         errorString += strError;
